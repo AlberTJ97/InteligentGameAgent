@@ -1,0 +1,246 @@
+// ~->[DNET-1]->~
+
+// File created by an unlicensed user using Netica 6.04 on Apr 18, 2018 at 16:27:23 UTC.
+
+bnet ADDA {
+autoupdate = TRUE;
+whenchanged = 1524068842;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	ShowLinkStrengths = 1;
+	windowposn = (25, 25, 507, 387);
+	resolution = 72;
+	drawingbounds = (1515, 755);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00e1e1e1;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00f8eed2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00ffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		};
+	};
+
+node St {
+	discrete = TRUE;
+	states = (Atacar, BuscarArmas, BuscarSalud, Explorar, Huir, DetectarPeligro);
+	kind = NATURE;
+	parents = ();
+	ExperBase = 1;
+	title = "Estado actual";
+	whenchanged = 1524068586;
+	belief = (0.1666667, 0.1666666, 0.1666667, 0.1666667, 0.1666667, 0.1666667);
+	visual V1 {
+		center = (168, 132);
+		height = 2;
+		};
+	};
+
+node St1 {
+	discrete = TRUE;
+	states = (Atacar, BuscarArmas, BuscarSalud, Explorar, Huir, DetectarPeligro);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St);
+	probs = 
+		// Atacar       BuscarArmas  BuscarSalud  Explorar     Huir         DetectarPeligro  // St              
+		  (0.9,         0.04,        0.04,        0,           0.02,        0,            // Atacar          
+		   0.05,        0.9,         0.01,        0.01,        0,           0.03,         // BuscarArmas     
+		   0.04,        0.05,        0.9,         0,           0,           0.01,         // BuscarSalud     
+		   0.06,        0.01,        0.01,        0.85,        0,           0.07,         // Explorar        
+		   0,           0.05,        0.05,        0,           0.9,         0,            // Huir            
+		   0.05,        0.04,        0.01,        0,           0,           0.9);         // DetectarPeligro ;
+	numcases = 1;
+	title = "Siguiente estado";
+	whenchanged = 1524068595;
+	belief = (0.1833333, 0.1816666, 0.17, 0.1433333, 0.1533333, 0.1683333);
+	visual V1 {
+		center = (480, 132);
+		height = 1;
+		};
+	};
+
+node H {
+	discrete = TRUE;
+	states = (Alto, Bajo);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St1);
+	probs = 
+		// Alto         Bajo          // St1             
+		  (0.5,         0.5,          // Atacar          
+		   0.5,         0.5,          // BuscarArmas     
+		   0,           1,            // BuscarSalud     
+		   0.6,         0.4,          // Explorar        
+		   0.1,         0.9,          // Huir            
+		   0.6,         0.4);         // DetectarPeligro ;
+	numcases = 1;
+	title = "Salud";
+	whenchanged = 1524068586;
+	belief = (0.3848333, 0.6151667);
+	visual V1 {
+		center = (228, 366);
+		height = 8;
+		};
+	};
+
+node PW {
+	discrete = TRUE;
+	states = (si, no);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St1);
+	probs = 
+		// si           no            // St1             
+		  (0.5,         0.5,          // Atacar          
+		   0.8,         0.2,          // BuscarArmas     
+		   0.2,         0.8,          // BuscarSalud     
+		   0,           1,            // Explorar        
+		   0,           1,            // Huir            
+		   0.49,        0.51);        // DetectarPeligro ;
+	numcases = 1;
+	title = "Armas cerca";
+	whenchanged = 1524065628;
+	belief = (0.3534833, 0.6465167);
+	visual V1 {
+		center = (558, 372);
+		height = 7;
+		};
+	};
+
+node HN {
+	discrete = TRUE;
+	states = (si, no);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St1);
+	probs = 
+		// si           no            // St1             
+		  (0.5,         0.5,          // Atacar          
+		   0.5,         0.5,          // BuscarArmas     
+		   0.5,         0.5,          // BuscarSalud     
+		   0,           1,            // Explorar        
+		   0.2,         0.8,          // Huir            
+		   1,           0);           // DetectarPeligro ;
+	numcases = 1;
+	title = "Ruido";
+	whenchanged = 1524068586;
+	belief = (0.4665, 0.5335);
+	visual V1 {
+		center = (390, 396);
+		height = 9;
+		};
+	};
+
+node OW {
+	discrete = TRUE;
+	states = (Armado, Desarmado);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St1);
+	probs = 
+		// Armado       Desarmado     // St1             
+		  (0.5,         0.5,          // Atacar          
+		   0.65,        0.35,         // BuscarArmas     
+		   0.6,         0.4,          // BuscarSalud     
+		   0.35,        0.65,         // Explorar        
+		   0.6,         0.4,          // Huir            
+		   0.3,         0.7);         // DetectarPeligro ;
+	numcases = 1;
+	title = "Arma del oponente";
+	whenchanged = 1524065646;
+	belief = (0.5044166, 0.4955833);
+	visual V1 {
+		center = (834, 156);
+		height = 4;
+		};
+	};
+
+node NE {
+	discrete = TRUE;
+	states = (Muchos, Pocos);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St1);
+	probs = 
+		// Muchos       Pocos         // St1             
+		  (0.7,         0.3,          // Atacar          
+		   0.5,         0.5,          // BuscarArmas     
+		   0.6,         0.4,          // BuscarSalud     
+		   0.4,         0.6,          // Explorar        
+		   0.6,         0.4,          // Huir            
+		   0.3,         0.7);         // DetectarPeligro ;
+	numcases = 1;
+	title = "Numero de oponentes";
+	whenchanged = 1524065653;
+	belief = (0.521, 0.479);
+	visual V1 {
+		center = (816, 84);
+		height = 5;
+		};
+	};
+
+node W {
+	discrete = TRUE;
+	states = (Armado, Desarmado);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St1);
+	probs = 
+		// Armado       Desarmado     // St1             
+		  (1,           0,            // Atacar          
+		   0.1,         0.9,          // BuscarArmas     
+		   0.35,        0.65,         // BuscarSalud     
+		   0.4,         0.6,          // Explorar        
+		   0.1,         0.9,          // Huir            
+		   1,           0);           // DetectarPeligro ;
+	numcases = 1;
+	title = "Armas";
+	whenchanged = 1524068586;
+	belief = (0.502, 0.498);
+	visual V1 {
+		center = (810, 228);
+		height = 3;
+		link 1 {
+			path = ((582, 161), (722, 202));
+			};
+		};
+	};
+
+node PH {
+	discrete = TRUE;
+	states = (si, no);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (St1);
+	probs = 
+		// si           no            // St1             
+		  (0.5,         0.5,          // Atacar          
+		   0.5,         0.5,          // BuscarArmas     
+		   0.8,         0.2,          // BuscarSalud     
+		   0,           1,            // Explorar        
+		   0,           1,            // Huir            
+		   0.5,         0.5);         // DetectarPeligro ;
+	numcases = 1;
+	title = "Salud cerca";
+	whenchanged = 1524068586;
+	belief = (0.4026667, 0.5973333);
+	visual V1 {
+		center = (708, 300);
+		height = 6;
+		};
+	};
+};
