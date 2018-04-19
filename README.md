@@ -10,6 +10,9 @@ Probably if you haven't got the Netica API this project don't will work fine on 
 
 If you have any more doubt, you can consult the [Netica API Guide](http://www.norsys.com/netica-j/docs/NeticaJ_Man.pdf)
 
+### Report
+You can find the report [here](https://github.com/AlberTJ97/InteligentGameAgent/blob/master/docs/REPORT.pdf)
+
 # Authors
 - [Alberto González](https://github.com/AlberTJ97)
 - David de León
